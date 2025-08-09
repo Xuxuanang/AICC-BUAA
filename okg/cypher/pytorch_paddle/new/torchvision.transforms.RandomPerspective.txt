@@ -1,0 +1,97 @@
+// 1.1 torchvision.transforms.RandomPerspective
+// 按照指定的概率对输入PIL图像进行透视变换。
+merge (: framework {name: 'PyTorch', version: '1.5.0'});
+merge (: class {framework: 'PyTorch', name: 'torchvision'});
+merge (: class {framework: 'PyTorch', name: 'transforms'});
+merge (: operator {framework: 'PyTorch', name: 'RandomPerspective', full_name: 'torchvision.transforms.RandomPerspective'});
+merge (: parameter {framework: 'PyTorch', operator: 'RandomPerspective', parameter_order: 1, name: 'distortion_scale', dtype: 'float', default: 0.5, optional: 'True'});
+merge (: parameter {framework: 'PyTorch', operator: 'RandomPerspective', parameter_order: 2, name: 'p', dtype: 'float', default: 0.5, optional: 'True'});
+merge (: parameter {framework: 'PyTorch', operator: 'RandomPerspective', parameter_order: 3, name: 'interpolation', dtype: 'interpolationMode', default: 'InterpolationMode.BILINEAR', optional: 'True'});
+merge (: parameter {framework: 'PyTorch', operator: 'RandomPerspective', parameter_order: 4, name: 'fill', dtype: 2, default: 0, optional: 'True'});
+merge (: childParameter {framework: 'PyTorch', operator: 'RandomPerspective', dtype_order: 1, parameter_order: 4, name: 'value', dtype : 'sequence'});
+merge (: childParameter {framework: 'PyTorch', operator: 'RandomPerspective', dtype_order: 2, parameter_order: 4, name: 'value', dtype : 'number'});
+
+
+// 1.2 mindspore.dataset.vision.RandomPerspective
+merge (: framework {name: 'MindSpore', version: '1.5.0'});
+merge (: class {framework: 'MindSpore', name: 'mindspore'});
+merge (: class {framework: 'MindSpore', name: 'dataset'});
+merge (: class {framework: 'MindSpore', name: 'vision'});
+merge (: operator {framework: 'MindSpore', name: 'RandomPerspective', full_name: 'mindspore.dataset.vision.RandomPerspective'});
+merge (: parameter {framework: 'MindSpore', operator: 'RandomPerspective', parameter_order: 1, name: 'distortion_scale', dtype: 'float', default: 0.5, optional: 'True'});
+merge (: parameter {framework: 'MindSpore', operator: 'RandomPerspective', parameter_order: 2, name: 'prob', dtype: 'float', default: 0.5, optional: 'True'});
+merge (: parameter {framework: 'MindSpore', operator: 'RandomPerspective', parameter_order: 3, name: 'interpolation', dtype: 'Inter', default: 'Inter.BICUBIC', optional: 'True'});
+
+
+// 2. relationship within the framework
+// 2.1 torchvision.transforms.RandomPerspective
+match
+	(m1: framework {name: 'PyTorch'}),
+	(m2: class {framework: 'PyTorch', name: 'torchvision'}),
+	(m3: class {framework: 'PyTorch', name: 'transforms'}),
+	(m4: operator {full_name: 'torchvision.transforms.RandomPerspective'})
+merge (m1) -[: classOfFramework {name: m2.name}]-> (m2)
+merge (m2) -[: subClassOfClass {name: m3.name}]-> (m3)
+merge (m3) -[: operatorOfClass {name: m4.name}]-> (m4);
+
+match
+	(m21: operator {full_name: 'torchvision.transforms.RandomPerspective'}),
+	(m22: parameter {framework: 'PyTorch', operator: 'RandomPerspective'})
+merge (m21) -[: parameterOfOperator {parameter_order: m22.parameter_order, name: m22.name}] -> (m22);
+
+match
+	(m21: parameter {framework: 'PyTorch', operator: 'RandomPerspective'}),
+	(m22: childParameter {framework: 'PyTorch', operator: 'RandomPerspective'})
+where m21.name = m22.name
+merge (m21) -[: oneOf {dtype_order: m22.dtype_order, dtype: m22.dtype}] -> (m22);
+
+
+// 2.2 mindspore.dataset.vision.RandomPerspective
+match
+	(m1: framework {name: 'MindSpore'}),
+	(m2: class {framework: 'MindSpore', name: 'mindspore'}),
+	(m3: class {framework: 'MindSpore', name: 'dataset'}),
+	(m4: class {framework: 'MindSpore', name: 'vision'}),
+	(m5: operator {full_name: 'mindspore.dataset.vision.RandomPerspective'})
+merge (m1) -[: classOfFramework {name: m2.name}]-> (m2)
+merge (m2) -[: subClassOfClass {name: m3.name}]-> (m3)
+merge (m3) -[: subClassOfClass {name: m4.name}]-> (m4)
+merge (m4) -[: operatorOfClass {name: m5.name}]-> (m5);
+
+match
+	(m21: operator {full_name: 'mindspore.dataset.vision.RandomPerspective'}),
+	(m22: parameter {framework: 'MindSpore', operator: 'RandomPerspective'})
+merge (m21) -[: parameterOfOperator {parameter_order: m22.parameter_order, name: m22.name}] -> (m22);
+
+match
+	(m21: parameter {framework: 'MindSpore', operator: 'RandomPerspective'}),
+	(m22: childParameter {framework: 'MindSpore', operator: 'RandomPerspective'})
+where m21.name = m22.name
+merge (m21) -[: oneOf {dtype_order: m22.dtype_order, dtype: m22.dtype}] -> (m22);
+
+
+
+// 3. relationship between frameworks
+match
+	(m31: operator {full_name: 'torchvision.transforms.RandomPerspective'}),
+	(m32: operator {full_name: 'mindspore.dataset.vision.RandomPerspective'})
+merge (m31) -[: equivalentOperator {framework_name: 'MindSpore'}]-> (m32)
+merge (m32) -[: equivalentOperator {framework_name: 'PyTorch'}]-> (m31);
+
+match
+	(m31: parameter {framework: 'PyTorch', operator: "RandomPerspective", parameter_order: 1}),
+	(m32: parameter {framework: 'MindSpore', operator: "RandomPerspective", parameter_order: 1})
+merge (m31) -[: equivalentParameter {framework_name: 'MindSpore'}]-> (m32)
+merge (m32) -[: equivalentParameter {framework_name: 'PyTorch'}]-> (m31);
+
+match
+	(m31: parameter {framework: 'PyTorch', operator: "RandomPerspective", parameter_order: 2}),
+	(m32: parameter {framework: 'MindSpore', operator: "RandomPerspective", parameter_order: 2})
+merge (m31) -[: equivalentParameter {framework_name: 'MindSpore'}]-> (m32)
+merge (m32) -[: equivalentParameter {framework_name: 'PyTorch'}]-> (m31);
+
+match
+	(m31: parameter {framework: 'PyTorch', operator: "RandomPerspective", parameter_order: 3}),
+	(m32: parameter {framework: 'MindSpore', operator: "RandomPerspective", parameter_order: 3})
+merge (m31) -[: equivalentParameter {framework_name: 'MindSpore'}]-> (m32)
+merge (m32) -[: equivalentParameter {framework_name: 'PyTorch'}]-> (m31);

@@ -1,0 +1,317 @@
+// 1.1 torchvision.datasets.CIFAR10
+// CIFAR10 Dataset.
+merge (: framework {name: 'PyTorch', version: '1.5.0'});
+merge (: class {framework: 'PyTorch', name: 'torchvision'});
+merge (: class {framework: 'PyTorch', name: 'datasets'});
+merge (: operator {framework: 'PyTorch', name: 'CIFAR10', full_name: 'torchvision.datasets.CIFAR10', mapping: "n:n", distinction: "assign"});
+merge (: parameter {framework: 'PyTorch', operator: 'CIFAR10', parameter_order: 1, name: 'root', dtype: 'str'});
+merge (: parameter {framework: 'PyTorch', operator: 'CIFAR10', parameter_order: 2, name: 'train', dtype: 'bool', default: 'Ture', optional: 'True'});
+merge (: parameter {framework: 'PyTorch', operator: 'CIFAR10', parameter_order: 3, name: 'transform', dtype: 'callable', default: 'None', optional: 'True'});
+merge (: parameter {framework: 'PyTorch', operator: 'CIFAR10', parameter_order: 4, name: 'target_transform', dtype: 'callable', default: 'None', optional: 'True'});
+merge (: parameter {framework: 'PyTorch', operator: 'CIFAR10', parameter_order: 5, name: 'download', dtype: 'bool', default: 'False', optional: 'True'});
+
+
+// 1.2 torch.utils.data.DataLoader
+// Data loader. Combines a dataset and a sampler, and provides an iterable over the given dataset.
+// The DataLoader supports both map-style and iterable-style datasets with single- or multi-process loading, customizing loading order and optional automatic batching (collation) and memory pinning.
+merge (: framework {name: 'PyTorch', version: '1.5.0'});
+merge (: class {framework: 'PyTorch', name: 'torch'});
+merge (: class {framework: 'PyTorch', name: 'utils'});
+merge (: class {framework: 'PyTorch', name: 'data'});
+merge (: operator {framework: 'PyTorch', name: 'DataLoader', full_name: 'torch.utils.data.DataLoader', mapping: "n:n", distinction: "parameter_dataset"});
+merge (: parameter {framework: 'PyTorch', operator: 'DataLoader', parameter_order: 1, name: 'dataset', dtype: 'Dataset'});
+merge (: parameter {framework: 'PyTorch', operator: 'DataLoader', parameter_order: 2, name: 'batch_size', dtype: 'int', default: 1, optional: 'True'});
+merge (: parameter {framework: 'PyTorch', operator: 'DataLoader', parameter_order: 3, name: 'shuffle', dtype: 'bool', default: 'False', optional: 'True'});
+merge (: parameter {framework: 'PyTorch', operator: 'DataLoader', parameter_order: 4, name: 'sampler', dtype: 'Sampler', default: 'None', optional: 'True'});
+merge (: parameter {framework: 'PyTorch', operator: 'DataLoader', parameter_order: 5, name: 'batch_sampler', dtype: 'Sampler', default: 'None', optional: 'True'});
+merge (: parameter {framework: 'PyTorch', operator: 'DataLoader', parameter_order: 6, name: 'num_workers', dtype: 'int', default: 0, optional: 'True'});
+merge (: parameter {framework: 'PyTorch', operator: 'DataLoader', parameter_order: 7, name: 'collate_fn', dtype: 'callable', default: 'None', optional: 'True'});
+merge (: parameter {framework: 'PyTorch', operator: 'DataLoader', parameter_order: 8, name: 'pin_memory', dtype: 'bool', default: 'False', optional: 'True'});
+merge (: parameter {framework: 'PyTorch', operator: 'DataLoader', parameter_order: 9, name: 'drop_last', dtype: 'bool', default: 'False', optional: 'True'});
+merge (: parameter {framework: 'PyTorch', operator: 'DataLoader', parameter_order: 10, name: 'timeout', dtype: 'numeric', default: 0, optional: 'True'});
+merge (: parameter {framework: 'PyTorch', operator: 'DataLoader', parameter_order: 11, name: 'worker_init_fn', dtype: 'callable', default: 'None', optional: 'True'});
+
+
+// 1.3 mindspore.dataset.Cifar10Dataset
+merge (: framework {name: 'MindSpore', version: '1.5.0'});
+merge (: class {framework: 'MindSpore', name: 'mindspore'});
+merge (: class {framework: 'MindSpore', name: 'dataset'});
+merge (: operator {framework: 'MindSpore', name: 'Cifar10Dataset', full_name: 'mindspore.dataset.Cifar10Dataset', mapping: "n:n"});
+merge (: parameter {framework: 'MindSpore', operator: 'Cifar10Dataset', parameter_order: 1, name: 'dataset_dir', dtype: 'str'});
+merge (: parameter {framework: 'MindSpore', operator: 'Cifar10Dataset', parameter_order: 2, name: 'usage', dtype: 'str', default: 'None', optional: 'True'});
+merge (: parameter {framework: 'MindSpore', operator: 'Cifar10Dataset', parameter_order: 3, name: 'num_samples', dtype: 'int', default: 'None', optional: 'True'});
+merge (: parameter {framework: 'MindSpore', operator: 'Cifar10Dataset', parameter_order: 4, name: 'num_parallel_workers', dtype: 'int', default: 'None', optional: 'True'});
+merge (: parameter {framework: 'MindSpore', operator: 'Cifar10Dataset', parameter_order: 5, name: 'shuffle', dtype: 'bool', default: 'None', optional: 'True'});
+merge (: parameter {framework: 'MindSpore', operator: 'Cifar10Dataset', parameter_order: 6, name: 'sampler', dtype: 'Sampler', default: 'None', optional: 'True'});
+merge (: parameter {framework: 'MindSpore', operator: 'Cifar10Dataset', parameter_order: 7, name: 'num_shards', dtype: 'int', default: 'None', optional: 'True'});
+merge (: parameter {framework: 'MindSpore', operator: 'Cifar10Dataset', parameter_order: 8, name: 'shard_id', dtype: 'int', default: 'None', optional: 'True'});
+merge (: parameter {framework: 'MindSpore', operator: 'Cifar10Dataset', parameter_order: 9, name: 'cache', dtype: 'DatasetCache', default: 'None', optional: 'True'});
+
+
+// 1.4 mindspore.dataset.MappableDataset
+merge (: framework {name: 'MindSpore', version: '1.5.0'});
+merge (: class {framework: 'MindSpore', name: 'mindspore'});
+merge (: class {framework: 'MindSpore', name: 'dataset'});
+merge (: operator {framework: 'MindSpore', name: 'MappableDataset', full_name: 'mindspore.dataset.MappableDataset', mapping: "n:n"});
+merge (: function {framework: 'MindSpore', operator: 'MappableDataset', function_order: 1, name: 'add_sampler'});
+merge (: function_parameter {framework: 'MindSpore', operator: 'MappableDataset', function: 'add_sampler', function_order: 1, parameter_order: 1, name: 'new_sampler', dtype: 'Sampler'});
+merge (: function {framework: 'MindSpore', operator: 'MappableDataset', function_order: 2, name: 'use_sampler'});
+merge (: function_parameter {framework: 'MindSpore', operator: 'MappableDataset', function: 'use_sampler', function_order: 2, parameter_order: 1, name: 'new_sampler', dtype: 'Sampler'});
+
+
+// 1.5 mindspore.dataset.Dataset
+merge (: framework {name: 'MindSpore', version: '1.5.0'});
+merge (: class {framework: 'MindSpore', name: 'mindspore'});
+merge (: class {framework: 'MindSpore', name: 'dataset'});
+merge (: operator {framework: 'MindSpore', name: 'Dataset', full_name: 'mindspore.dataset.Dataset', mapping: "n:n"});
+merge (: function {framework: 'MindSpore', operator: 'Dataset', function_order: 1, name: 'close_pool'});
+merge (: function {framework: 'MindSpore', operator: 'Dataset', function_order: 2, name: 'to_json'});
+merge (: function {framework: 'MindSpore', operator: 'Dataset', function_order: 3, name: 'batch'});
+merge (: function_parameter {framework: 'MindSpore', operator: 'Dataset', function: 'batch', function_order: 3, parameter_order: 1, name: 'batch_size'});
+merge (: function_parameter {framework: 'MindSpore', operator: 'Dataset', function: 'batch', function_order: 3, parameter_order: 2, name: 'drop_remainder'});
+merge (: function {framework: 'MindSpore', operator: 'Dataset', function_order: 4, name: 'sync_wait'});
+merge (: function {framework: 'MindSpore', operator: 'Dataset', function_order: 5, name: 'shuffle'});
+merge (: function_parameter {framework: 'MindSpore', operator: 'Dataset', function: 'shuffle', function_order: 5, parameter_order: 1, name: 'buffer_size'});
+merge (: function {framework: 'MindSpore', operator: 'Dataset', function_order: 6, name: 'flat_map'});
+merge (: function {framework: 'MindSpore', operator: 'Dataset', function_order: 7, name: 'map'});
+merge (: function_parameter {framework: 'MindSpore', operator: 'Dataset', function: 'map', function_order: 7, parameter_order: 1, name: 'operations'});
+merge (: function {framework: 'MindSpore', operator: 'Dataset', function_order: 8, name: 'filter'});
+merge (: function {framework: 'MindSpore', operator: 'Dataset', function_order: 9, name: 'repeat'});
+merge (: function {framework: 'MindSpore', operator: 'Dataset', function_order: 10, name: 'skip'});
+merge (: function {framework: 'MindSpore', operator: 'Dataset', function_order: 11, name: 'take'});
+merge (: function {framework: 'MindSpore', operator: 'Dataset', function_order: 12, name: 'split'});
+merge (: function {framework: 'MindSpore', operator: 'Dataset', function_order: 13, name: 'zip'});
+merge (: function {framework: 'MindSpore', operator: 'Dataset', function_order: 14, name: 'concat'});
+merge (: function {framework: 'MindSpore', operator: 'Dataset', function_order: 15, name: 'rename'});
+merge (: function {framework: 'MindSpore', operator: 'Dataset', function_order: 16, name: 'project'});
+merge (: function {framework: 'MindSpore', operator: 'Dataset', function_order: 17, name: 'apply'});
+merge (: function {framework: 'MindSpore', operator: 'Dataset', function_order: 18, name: 'device_que'});
+merge (: function {framework: 'MindSpore', operator: 'Dataset', function_order: 19, name: 'to_device'});
+merge (: function {framework: 'MindSpore', operator: 'Dataset', function_order: 20, name: 'save'});
+merge (: function {framework: 'MindSpore', operator: 'Dataset', function_order: 21, name: 'create_tuple_iterator'});
+merge (: function {framework: 'MindSpore', operator: 'Dataset', function_order: 22, name: 'create_dict_iterator'});
+merge (: function {framework: 'MindSpore', operator: 'Dataset', function_order: 23, name: 'input_indexs'});
+merge (: function {framework: 'MindSpore', operator: 'Dataset', function_order: 24, name: 'get_col_names'});
+merge (: function {framework: 'MindSpore', operator: 'Dataset', function_order: 25, name: 'output_shapes'});
+merge (: function {framework: 'MindSpore', operator: 'Dataset', function_order: 26, name: 'output_types'});
+merge (: function {framework: 'MindSpore', operator: 'Dataset', function_order: 27, name: 'get_dataset_size'});
+merge (: function {framework: 'MindSpore', operator: 'Dataset', function_order: 28, name: 'set_dynamic_columns'});
+merge (: function {framework: 'MindSpore', operator: 'Dataset', function_order: 29, name: 'dynamic_min_max_shapes'});
+merge (: function {framework: 'MindSpore', operator: 'Dataset', function_order: 30, name: 'num_classes'});
+merge (: function {framework: 'MindSpore', operator: 'Dataset', function_order: 31, name: 'sync_update'});
+merge (: function {framework: 'MindSpore', operator: 'Dataset', function_order: 32, name: 'get_batch_size'});
+merge (: function {framework: 'MindSpore', operator: 'Dataset', function_order: 33, name: 'get_repeat_count'});
+merge (: function {framework: 'MindSpore', operator: 'Dataset', function_order: 34, name: 'get_class_indexing'});
+merge (: function {framework: 'MindSpore', operator: 'Dataset', function_order: 35, name: 'reset'});
+
+
+
+// relationship within the framework
+// 2.1 torchvision.datasets.CIFAR10
+match
+	(m1: framework {name: 'PyTorch'}),
+	(m2: class {framework: 'PyTorch', name: 'torchvision'}),
+	(m3: class {framework: 'PyTorch', name: 'datasets'}),
+	(m4: operator {full_name: 'torchvision.datasets.CIFAR10'})
+merge (m1) -[: classOfFramework {name: m2.name}]-> (m2)
+merge (m2) -[: subClassOfClass {name: m3.name}]-> (m3)
+merge (m3) -[: operatorOfClass {name: m4.name}]-> (m4);
+
+match
+	(m21: operator {full_name: 'torchvision.datasets.CIFAR10'}),
+	(n21: parameter {framework: 'PyTorch', operator: 'CIFAR10'})
+merge (m21) -[: parameterOfOperator {parameter_order: n21.parameter_order, name: n21.name}] -> (n21);
+
+
+// 2.2 torch.utils.data.DataLoader
+match
+	(m1: framework {name: 'PyTorch'}),
+	(m2: class {framework: 'PyTorch', name: 'torch'}),
+	(m3: class {framework: 'PyTorch', name: 'utils'}),
+	(m4: class {framework: 'PyTorch', name: 'data'}),
+	(m5: operator {full_name: 'torch.utils.data.DataLoader'})
+merge (m1) -[: classOfFramework {name: m2.name}]-> (m2)
+merge (m2) -[: subClassOfClass {name: m3.name}]-> (m3)
+merge (m3) -[: subClassOfClass {name: m4.name}]-> (m4)
+merge (m4) -[: operatorOfClass {name: m5.name}]-> (m5);
+
+match
+	(m21: operator {full_name: 'torch.utils.data.DataLoader'}),
+	(n21: parameter {framework: 'PyTorch', operator: 'DataLoader'})
+merge (m21) -[: parameterOfOperator {parameter_order: n21.parameter_order, name: n21.name}] -> (n21);
+
+
+// 2.3 mindspore.dataset.Cifar10Dataset
+match
+	(m1: framework {name: 'MindSpore'}),
+	(m2: class {framework: 'MindSpore', name: 'mindspore'}),
+	(m3: class {framework: 'MindSpore', name: 'dataset'}),
+	(m4: operator {full_name: 'mindspore.dataset.Cifar10Dataset'})
+merge (m1) -[: classOfFramework {name: m2.name}]-> (m2)
+merge (m2) -[: subClassOfClass {name: m3.name}]-> (m3)
+merge (m3) -[: operatorOfClass {name: m4.name}]-> (m4);
+
+match
+	(m21: operator {full_name: 'mindspore.dataset.Cifar10Dataset'}),
+	(n21: parameter {framework: 'MindSpore', operator: 'Cifar10Dataset'})
+merge (m21) -[: parameterOfOperator {parameter_order: n21.parameter_order, name: n21.name}] -> (n21);
+
+
+// 2.4 mindspore.dataset.MappableDataset
+match
+	(m1: framework {name: 'MindSpore'}),
+	(m2: class {framework: 'MindSpore', name: 'mindspore'}),
+	(m3: class {framework: 'MindSpore', name: 'dataset'}),
+	(m4: operator {full_name: 'mindspore.dataset.MappableDataset'})
+merge (m1) -[: classOfFramework {name: m2.name}]-> (m2)
+merge (m2) -[: subClassOfClass {name: m3.name}]-> (m3)
+merge (m3) -[: operatorOfClass {name: m4.name}]-> (m4);
+
+match
+	(m21: operator {full_name: 'mindspore.dataset.MappableDataset'}),
+	(n21: function {framework: 'MindSpore', operator: 'MappableDataset'})
+merge (m21) -[: functionOfOperator {function_order: n21.function_order, name: n21.name}] -> (n21);
+
+match
+	(m22: function {framework: 'MindSpore', operator: 'MappableDataset'}),
+	(n22: function_parameter {framework: 'MindSpore', operator: 'MappableDataset'})
+where m22.function_order = n22.function_order
+merge (m22) -[: parameterOfFunction {parameter_order: n22.parameter_order, name: n22.name}] -> (n22);
+
+
+// 2.5 mindspore.dataset.Dataset
+match
+	(m1: framework {name: 'MindSpore'}),
+	(m2: class {framework: 'MindSpore', name: 'mindspore'}),
+	(m3: class {framework: 'MindSpore', name: 'dataset'}),
+	(m4: operator {full_name: 'mindspore.dataset.Dataset'})
+merge (m1) -[: classOfFramework {name: m2.name}]-> (m2)
+merge (m2) -[: subClassOfClass {name: m3.name}]-> (m3)
+merge (m3) -[: operatorOfClass {name: m4.name}]-> (m4);
+
+match
+	(m21: operator {full_name: 'mindspore.dataset.Dataset'}),
+	(n21: function {framework: 'MindSpore', operator: 'Dataset'})
+merge (m21) -[: functionOfOperator {function_order: n21.function_order, name: n21.name}] -> (n21);
+
+match
+	(m22: function {framework: 'MindSpore', operator: 'Dataset'}),
+	(n22: function_parameter {framework: 'MindSpore', operator: 'Dataset'})
+where m22.function_order = n22.function_order
+merge (m22) -[: parameterOfFunction {parameter_order: n22.parameter_order, name: n22.name}] -> (n22);
+
+
+
+// 3. relationship between frameworks
+// 3.1 brotherOperator
+//match
+//	(m3: operator {full_name: 'torchvision.datasets.CIFAR10'}),
+//	(n3: operator {full_name: 'torch.utils.data.DataLoader'})
+//merge (m3) -[: brotherOperator {mapping: "n:n", order: 1}]-> (n3);
+
+//match
+//	(m3: operator {full_name: 'mindspore.dataset.Cifar10Dataset'}),
+//	(n3: operator {full_name: 'mindspore.dataset.Dataset'})
+//merge (m3) -[: brotherOperator {mapping: "n:n", order: 1}]-> (n3);
+
+
+// 3.2 equivalentOperator
+match
+	(m31: operator {full_name: 'torchvision.datasets.CIFAR10'}),
+	(m32: operator {full_name: 'mindspore.dataset.Cifar10Dataset'})
+merge (m31) -[: equivalentOperator {framework_name: 'MindSpore', mapping: "n:n"}]-> (m32)
+merge (m32) -[: equivalentOperator {framework_name: 'PyTorch', mapping: "n:n"}]-> (m31);
+//merge (m31) -[: equivalentOperator {framework_name: 'MindSpore', mapping: "n:n", type: "parameter2function"}]-> (m33)
+//merge (m33) -[: equivalentOperator {framework_name: 'PyTorch', mapping: "n:n", type: "function2parameter"}]-> (m31);
+
+//match
+//	(m31: operator {full_name: 'torch.utils.data.DataLoader'}),
+//	(m32: operator {full_name: 'mindspore.dataset.Dataset'})
+//merge (m32) -[: equivalentOperator {framework_name: 'PyTorch', mapping: "n:n", type: "operator2operator"}]-> (m31);
+//merge (m32) -[: equivalentOperator {framework_name: 'PyTorch', mapping: "n:n", type: "function2parameter"}]-> (m31);
+
+
+// 3.3 equivalentParameter
+match
+	(m31: parameter {framework: 'PyTorch', operator: "CIFAR10", parameter_order: 1}),
+	(n31: parameter {framework: 'MindSpore', operator: "Cifar10Dataset", parameter_order: 1})
+merge (m31) -[: equivalentParameter {framework_name: 'MindSpore', type: 'parameter2parameter'}]-> (n31)
+merge (n31) -[: equivalentParameter {framework_name: 'PyTorch', type: 'parameter2parameter'}]-> (m31);
+
+match
+	(m31: parameter {framework: 'PyTorch', operator: "CIFAR10", parameter_order: 2}),
+	(n31: parameter {framework: 'MindSpore', operator: "Cifar10Dataset", parameter_order: 2})
+merge (m31) -[: equivalentParameter {framework_name: 'MindSpore', type: 'parameter2parameter'}]-> (n31)
+merge (n31) -[: equivalentParameter {framework_name: 'PyTorch', type: 'parameter2parameter'}]-> (m31);
+
+match
+	(m31: parameter {framework: 'PyTorch', operator: "CIFAR10", parameter_order: 3}),
+	(n31: function_parameter {framework: 'MindSpore', operator: "Dataset", function_order: 7, parameter_order: 1})
+merge (m31) -[: equivalentParameter {framework_name: 'MindSpore', type: 'parameter2function'}]-> (n31)
+merge (n31) -[: equivalentParameter {framework_name: 'PyTorch', type: 'function2parameter'}]-> (m31);
+
+match
+	(m31: parameter {framework: 'PyTorch', operator: "DataLoader", parameter_order: 2}),
+	(n31: function_parameter {framework: 'MindSpore', operator: "Dataset", function_order: 3, parameter_order: 1})
+merge (m31) -[: equivalentParameter {framework_name: 'MindSpore', type: 'parameter2function'}]-> (n31)
+merge (n31) -[: equivalentParameter {framework_name: 'PyTorch', type: 'function2parameter'}]-> (m31);
+
+match
+	(m31: parameter {framework: 'PyTorch', operator: "DataLoader", parameter_order: 3}),
+	(n31: function_parameter {framework: 'MindSpore', operator: "Dataset", function_order: 5, parameter_order: 1})
+merge (m31) -[: equivalentParameter {framework_name: 'MindSpore', type: 'parameter2function'}]-> (n31)
+merge (n31) -[: equivalentParameter {framework_name: 'PyTorch', type: 'function2parameter'}]-> (m31);
+
+match
+	(m31: parameter {framework: 'PyTorch', operator: "DataLoader", parameter_order: 9}),
+	(n31: function_parameter {framework: 'MindSpore', operator: "Dataset", function_order: 3, parameter_order: 2})
+merge (m31) -[: equivalentParameter {framework_name: 'MindSpore', type: 'parameter2function'}]-> (n31)
+merge (n31) -[: equivalentParameter {framework_name: 'PyTorch', type: 'function2parameter'}]-> (m31);
+
+
+// 3.4 partOfNNOperator
+match
+	(m31: parameter {framework: 'PyTorch', operator: "CIFAR10", parameter_order: 1}),
+	(m32: operator {full_name: 'mindspore.dataset.Cifar10Dataset'})
+merge (m31) -[: partOfNNOperator {framework_name: 'MindSpore'}]-> (m32);
+
+match
+	(m31: parameter {framework: 'PyTorch', operator: "CIFAR10", parameter_order: 2}),
+	(m32: operator {full_name: 'mindspore.dataset.Cifar10Dataset'})
+merge (m31) -[: partOfNNOperator {framework_name: 'MindSpore'}]-> (m32);
+
+match
+	(m31: parameter {framework: 'PyTorch', operator: "CIFAR10", parameter_order: 3}),
+	(m32: operator {full_name: 'mindspore.dataset.Cifar10Dataset'})
+merge (m31) -[: partOfNNOperator {framework_name: 'MindSpore'}]-> (m32);
+
+match
+	(m31: parameter {framework: 'PyTorch', operator: "DataLoader", parameter_order: 2}),
+	(m32: operator {full_name: 'mindspore.dataset.Cifar10Dataset'})
+merge (m31) -[: partOfNNOperator {framework_name: 'MindSpore'}]-> (m32);
+
+match
+	(m31: parameter {framework: 'PyTorch', operator: "DataLoader", parameter_order: 3}),
+	(m32: operator {full_name: 'mindspore.dataset.Cifar10Dataset'})
+merge (m31) -[: partOfNNOperator {framework_name: 'MindSpore'}]-> (m32);
+
+match
+	(m31: parameter {framework: 'PyTorch', operator: "DataLoader", parameter_order: 9}),
+	(m32: operator {full_name: 'mindspore.dataset.Cifar10Dataset'})
+merge (m31) -[: partOfNNOperator {framework_name: 'MindSpore'}]-> (m32);
+
+// 3.5 customOperator
+// CIFAR10 Dataset.
+merge (: framework {name: 'MindSpore', version: '1.5.0'});
+merge (: customOperator {framework: 'MindSpore', name: 'CustomDataLoader'});
+
+
+match
+	(m31: operator {full_name: 'torchvision.datasets.CIFAR10'}),
+	(m32: customOperator {framework: 'MindSpore', name: 'CustomDataLoader'})
+merge (m31) -[: customOperator {framework_name: 'MindSpore'}]-> (m32);
+
+match
+	(m31: operator {full_name: 'torch.utils.data.DataLoader'}),
+	(m32: customOperator {framework: 'MindSpore', name: 'CustomDataLoader'})
+merge (m31) -[: customOperator {framework_name: 'MindSpore'}]-> (m32);

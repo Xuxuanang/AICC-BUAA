@@ -1,0 +1,79 @@
+// 1.1 torchvision.transforms.RandomChoice
+// 在一组数据增强中随机选择部分增强处理进行应用。
+merge (: framework {name: 'PyTorch', version: '1.5.0'});
+merge (: class {framework: 'PyTorch', name: 'torchvision'});
+merge (: class {framework: 'PyTorch', name: 'transforms'});
+merge (: operator {framework: 'PyTorch', name: 'RandomChoice', full_name: 'torchvision.transforms.RandomChoice'});
+merge (: parameter {framework: 'PyTorch', operator: 'RandomChoice', parameter_order: 1, name: 'transforms', dtype: 'sequence'});
+
+
+// 1.2 mindspore.dataset.transforms.RandomChoice
+merge (: framework {name: 'MindSpore', version: '1.5.0'});
+merge (: class {framework: 'MindSpore', name: 'mindspore'});
+merge (: class {framework: 'MindSpore', name: 'dataset'});
+merge (: class {framework: 'MindSpore', name: 'transforms'});
+merge (: operator {framework: 'MindSpore', name: 'RandomChoice', full_name: 'mindspore.dataset.transforms.RandomChoice'});
+merge (: parameter {framework: 'MindSpore', operator: 'RandomChoice', parameter_order: 1, name: 'transforms', dtype: 'list'});
+
+
+
+// 2. relationship within the framework
+// 2.1 torchvision.transforms.RandomChoice
+match
+	(m1: framework {name: 'PyTorch'}),
+	(m2: class {framework: 'PyTorch', name: 'torchvision'}),
+	(m3: class {framework: 'PyTorch', name: 'transforms'}),
+	(m4: operator {full_name: 'torchvision.transforms.RandomChoice'})
+merge (m1) -[: classOfFramework {name: m2.name}]-> (m2)
+merge (m2) -[: subClassOfClass {name: m3.name}]-> (m3)
+merge (m3) -[: operatorOfClass {name: m4.name}]-> (m4);
+
+match
+	(m21: operator {full_name: 'torchvision.transforms.RandomChoice'}),
+	(m22: parameter {framework: 'PyTorch', operator: 'RandomChoice'})
+merge (m21) -[: parameterOfOperator {parameter_order: m22.parameter_order, name: m22.name}] -> (m22);
+
+match
+	(m21: parameter {framework: 'PyTorch', operator: 'RandomChoice'}),
+	(m22: childParameter {framework: 'PyTorch', operator: 'RandomChoice'})
+where m21.name = m22.name
+merge (m21) -[: oneOf {dtype_order: m22.dtype_order, dtype: m22.dtype}] -> (m22);
+
+
+// 2.2 mindspore.dataset.transforms.RandomChoice
+match
+	(m1: framework {name: 'MindSpore'}),
+	(m2: class {framework: 'MindSpore', name: 'mindspore'}),
+	(m3: class {framework: 'MindSpore', name: 'dataset'}),
+	(m4: class {framework: 'MindSpore', name: 'transforms'}),
+	(m5: operator {full_name: 'mindspore.dataset.transforms.RandomChoice'})
+merge (m1) -[: classOfFramework {name: m2.name}]-> (m2)
+merge (m2) -[: subClassOfClass {name: m3.name}]-> (m3)
+merge (m3) -[: subClassOfClass {name: m4.name}]-> (m4)
+merge (m4) -[: operatorOfClass {name: m5.name}]-> (m5);
+
+match
+	(m21: operator {full_name: 'mindspore.dataset.transforms.RandomChoice'}),
+	(m22: parameter {framework: 'MindSpore', operator: 'RandomChoice'})
+merge (m21) -[: parameterOfOperator {parameter_order: m22.parameter_order, name: m22.name}] -> (m22);
+
+match
+	(m21: parameter {framework: 'MindSpore', operator: 'RandomChoice'}),
+	(m22: childParameter {framework: 'MindSpore', operator: 'RandomChoice'})
+where m21.name = m22.name
+merge (m21) -[: oneOf {dtype_order: m22.dtype_order, dtype: m22.dtype}] -> (m22);
+
+
+
+// 3. relationship between frameworks
+match
+	(m31: operator {full_name: 'torchvision.transforms.RandomChoice'}),
+	(m32: operator {full_name: 'mindspore.dataset.transforms.RandomChoice'})
+merge (m31) -[: equivalentOperator {framework_name: 'MindSpore'}]-> (m32)
+merge (m32) -[: equivalentOperator {framework_name: 'PyTorch'}]-> (m31);
+
+match
+	(m31: parameter {framework: 'PyTorch', operator: "RandomChoice", parameter_order: 1}),
+	(m32: parameter {framework: 'MindSpore', operator: "RandomChoice", parameter_order: 1})
+merge (m31) -[: equivalentParameter {framework_name: 'MindSpore'}]-> (m32)
+merge (m32) -[: equivalentParameter {framework_name: 'PyTorch'}]-> (m31);

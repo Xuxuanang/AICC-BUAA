@@ -1,0 +1,46 @@
+// torch.nn.Module
+// 功能一致，仅 paddle 参数更多
+merge (: framework {name: 'PyTorch', version: '1.5.0'});
+merge (: class {framework: 'PyTorch', name: 'torch'});
+merge (: class {framework: 'PyTorch', name: 'nn'});
+merge (: operator {framework: 'PyTorch', name: 'Module', full_name: 'torch.nn.Module'});
+
+
+// paddle.nn.Layer
+merge (: framework {name: 'PaddlePaddle', version: '1.5.0'});
+merge (: class {framework: 'PaddlePaddle', name: 'paddle'});
+merge (: class {framework: 'PaddlePaddle', name: 'nn'});
+merge (: operator {framework: 'PaddlePaddle', name: 'Layer', full_name: 'paddle.nn.Layer'});
+merge (: parameter {framework: 'PaddlePaddle', operator: 'paddle.nn.Layer', parameter_order: 1, name: 'name_scope', dtype: 'str', default: 'None'});
+merge (: parameter {framework: 'PaddlePaddle', operator: 'paddle.nn.Layer', parameter_order: 2, name: 'dtype', dtype: 'str', default: 'float32'});
+
+
+// relationship within the framework
+match
+	(m1: framework {name: 'PyTorch'}),
+	(m2: class {framework: 'PyTorch', name: 'torch'}),
+	(m3: class {framework: 'PyTorch', name: 'nn'}),
+	(m4: operator {full_name: 'torch.nn.Module'}),
+	(n1: framework {name: 'PaddlePaddle'}),
+	(n2: class {framework: 'PaddlePaddle', name: 'paddle'}),
+	(n3: class {framework: 'PaddlePaddle', name: 'nn'}),
+	(n4: operator {full_name: 'paddle.nn.Layer'})
+merge (m1) -[: classOfFramework {name: m2.name}]-> (m2)
+merge (m2) -[: subClassOfClass {name: m3.name}]-> (m3)
+merge (m3) -[: operatorOfClass {name: m4.name}]-> (m4)
+merge (n1) -[: classOfFramework {name: n2.name}]-> (n2)
+merge (n2) -[: subClassOfClass {name: n3.name}]-> (n3)
+merge (n3) -[: operatorOfClass {name: n4.name}]-> (n4);
+
+match
+	(m11: operator {full_name: 'paddle.nn.Layer'}),
+	(n11: parameter {framework: 'PaddlePaddle', operator: 'paddle.nn.Layer'})
+merge (m11) -[: parameterOfOperator {parameter_order: n11.parameter_order, name: n11.name}] -> (n11);
+
+
+// relationship between frameworks
+match
+	(m3: operator {full_name: 'torch.nn.Module'}),
+	(n3: operator {full_name: 'paddle.nn.Layer'})
+merge (m3) -[: equivalentOperator {framework_name: 'PaddlePaddle'}]-> (n3)
+merge (n3) -[: equivalentOperator {framework_name: 'PyTorch'}]-> (m3);

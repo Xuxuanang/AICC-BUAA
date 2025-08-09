@@ -1,0 +1,85 @@
+// 1.1 torch.nn.functional.relu
+// 线性修正单元激活函数（Rectified Linear Unit）。
+merge (: framework {name: 'PyTorch', version: '1.5.0'});
+merge (: class {framework: 'PyTorch', name: 'torch'});
+merge (: class {framework: 'PyTorch', name: 'nn'});
+merge (: class {framework: 'PyTorch', name: 'functional'});
+merge (: operator {framework: 'PyTorch', name: 'relu', full_name: 'torch.nn.functional.relu'});
+merge (: parameter {framework: 'PyTorch', operator: 'torch.nn.functional.relu', parameter_order: 1, name: 'input'});
+merge (: parameter {framework: 'PyTorch', operator: 'torch.nn.functional.relu', parameter_order: 2, name: 'inplace', default: 'False'});
+
+
+// 1.2 mindspore.ops.ReLU
+merge (: framework {name: 'MindSpore', version: '1.5.0'});
+merge (: class {framework: 'MindSpore', name: 'mindspore'});
+merge (: class {framework: 'MindSpore', name: 'ops'});
+merge (: operator {framework: 'MindSpore', name: 'ReLU', full_name: 'mindspore.ops.ReLU'});
+merge (: input {framework: 'MindSpore', operator: 'mindspore.ops.ReLU', input_order: 1, name: 'input'});
+
+
+
+// 2. relationship within the framework
+// 2.1 torch.nn.functional.relu
+match
+	(m1: framework {name: 'PyTorch'}),
+	(m2: class {framework: 'PyTorch', name: 'torch'}),
+	(m3: class {framework: 'PyTorch', name: 'nn'}),
+	(m4: class {framework: 'PyTorch', name: 'functional'}),
+	(m5: operator {full_name: 'torch.nn.functional.relu'})
+merge (m1) -[: classOfFramework {name: m2.name}]-> (m2)
+merge (m2) -[: subClassOfClass {name: m3.name}]-> (m3)
+merge (m3) -[: subClassOfClass {name: m4.name}]-> (m4)
+merge (m4) -[: operatorOfClass {name: m5.name}]-> (m5);
+
+match
+	(m21: operator {full_name: 'torch.nn.functional.relu'}),
+	(m22: parameter {framework: 'PyTorch', operator: 'torch.nn.functional.relu'})
+merge (m21) -[: parameterOfOperator {parameter_order: m22.parameter_order, name: m22.name}] -> (m22);
+
+match
+	(m21: parameter {framework: 'PyTorch', operator: 'torch.nn.functional.relu'}),
+	(m22: childParameter {framework: 'PyTorch', operator: 'torch.nn.functional.relu'})
+where m21.name = m22.name
+merge (m21) -[: oneOf {dtype_order: m22.dtype_order, dtype: m22.dtype}] -> (m22);
+
+
+// 2.2 mindspore.ops.ReLU
+match
+	(m1: framework {name: 'MindSpore'}),
+	(m2: class {framework: 'MindSpore', name: 'mindspore'}),
+	(m3: class {framework: 'MindSpore', name: 'ops'}),
+	(m4: operator {full_name: 'mindspore.ops.ReLU'})
+merge (m1) -[: classOfFramework {name: m2.name}]-> (m2)
+merge (m2) -[: subClassOfClass {name: m3.name}]-> (m3)
+merge (m3) -[: operatorOfClass {name: m4.name}]-> (m4);
+
+match
+	(m21: operator {full_name: 'mindspore.ops.ReLU'}),
+	(m22: parameter {framework: 'MindSpore', operator: 'mindspore.ops.ReLU'})
+merge (m21) -[: parameterOfOperator {parameter_order: m22.parameter_order, name: m22.name}] -> (m22);
+
+match
+	(m21: parameter {framework: 'MindSpore', operator: 'mindspore.ops.ReLU'}),
+	(m22: childParameter {framework: 'MindSpore', operator: 'mindspore.ops.ReLU'})
+where m21.name = m22.name
+merge (m21) -[: oneOf {dtype_order: m22.dtype_order, dtype: m22.dtype}] -> (m22);
+
+match
+	(m21: operator {full_name: 'mindspore.ops.ReLU'}),
+	(m22: input {framework: 'MindSpore', operator: 'mindspore.ops.ReLU'})
+merge (m21) -[: inputOfOperator {input_order: m22.input_order, name: m22.name}] -> (m22);
+
+
+
+// 3. relationship between frameworks
+match
+	(m31: operator {full_name: 'torch.nn.functional.relu'}),
+	(m32: operator {full_name: 'mindspore.ops.ReLU'})
+merge (m31) -[: equivalentOperator {framework_name: 'MindSpore'}]-> (m32)
+merge (m32) -[: equivalentOperator {framework_name: 'PyTorch'}]-> (m31);
+
+match
+	(m31: parameter {framework: 'PyTorch', operator: "torch.nn.functional.relu", parameter_order: 1}),
+	(m32: input {framework: 'MindSpore', operator: "mindspore.ops.ReLU", input_order: 1})
+merge (m31) -[: equivalentParameter {framework_name: 'MindSpore'}]-> (m32)
+merge (m32) -[: equivalentParameter {framework_name: 'PyTorch'}]-> (m31);

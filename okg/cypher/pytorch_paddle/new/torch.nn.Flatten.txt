@@ -1,0 +1,103 @@
+// 1.1 torch.nn.Flatten
+// 线性变换层。
+// 功能一致，参数不一致
+merge (: framework {name: 'PyTorch', version: '1.5.0'});
+merge (: class {framework: 'PyTorch', name: 'torch'});
+merge (: class {framework: 'PyTorch', name: 'nn'});
+merge (: operator {framework: 'PyTorch', name: 'Flatten', full_name: 'torch.nn.Flatten'});
+merge (: parameter {framework: 'PyTorch', operator: 'torch.nn.Flatten', parameter_order: 1, name: 'start_dim', dtype: 'int'});
+merge (: parameter {framework: 'PyTorch', operator: 'torch.nn.Flatten', parameter_order: 2, name: 'end_dim', dtype: 'int'});
+merge (: input {framework: 'PyTorch', operator: 'torch.nn.Flatten', input_order: 1, name: 'x'});
+
+
+// 1.2 paddle.nn.Flatten
+merge (: framework {name: 'PaddlePaddle', version: '1.5.0'});
+merge (: class {framework: 'PaddlePaddle', name: 'paddle'});
+merge (: class {framework: 'PaddlePaddle', name: 'nn'});
+merge (: operator {framework: 'PaddlePaddle', name: 'Flatten', full_name: 'paddle.nn.Flatten'});
+merge (: parameter {framework: 'PaddlePaddle', operator: 'paddle.nn.Flatten', parameter_order: 1, name: 'start_axis', dtype: 'int'});
+merge (: parameter {framework: 'PaddlePaddle', operator: 'paddle.nn.Flatten', parameter_order: 2, name: 'stop_axis', dtype: 'int'});
+merge (: input {framework: 'PaddlePaddle', operator: 'paddle.nn.Flatten', input_order: 1, name: 'x'});
+
+
+
+// 2. relationship within the framework
+// 2.1 torch.nn.Flatten
+match
+	(m1: framework {name: 'PyTorch'}),
+	(m2: class {framework: 'PyTorch', name: 'torch'}),
+	(m3: class {framework: 'PyTorch', name: 'nn'}),
+	(m4: operator {full_name: 'torch.nn.Flatten'})
+merge (m1) -[: classOfFramework {name: m2.name}]-> (m2)
+merge (m2) -[: subClassOfClass {name: m3.name}]-> (m3)
+merge (m3) -[: operatorOfClass {name: m4.name}]-> (m4);
+
+match
+	(m21: operator {full_name: 'torch.nn.Flatten'}),
+	(m22: parameter {framework: 'PyTorch', operator: 'torch.nn.Flatten'})
+merge (m21) -[: parameterOfOperator {parameter_order: m22.parameter_order, name: m22.name}] -> (m22);
+
+match
+	(m21: parameter {framework: 'PyTorch', operator: 'torch.nn.Flatten'}),
+	(m22: childParameter {framework: 'PyTorch', operator: 'torch.nn.Flatten'})
+where m21.name = m22.name
+merge (m21) -[: oneOf {dtype_order: m22.dtype_order, dtype: m22.dtype}] -> (m22);
+
+match
+	(m21: operator {full_name: 'torch.nn.Flatten'}),
+	(m22: input {framework: 'PyTorch', operator: 'torch.nn.Flatten'})
+merge (m21) -[: inputOfOperator {input_order: m22.input_order, name: m22.name}] -> (m22);
+
+
+// 2.2 paddle.nn.Flatten
+match
+	(m1: framework {name: 'PaddlePaddle'}),
+	(m2: class {framework: 'PaddlePaddle', name: 'paddle'}),
+	(m3: class {framework: 'PaddlePaddle', name: 'nn'}),
+	(m4: operator {full_name: 'paddle.nn.Flatten'})
+merge (m1) -[: classOfFramework {name: m2.name}]-> (m2)
+merge (m2) -[: subClassOfClass {name: m3.name}]-> (m3)
+merge (m3) -[: operatorOfClass {name: m4.name}]-> (m4);
+
+match
+	(m21: operator {full_name: 'paddle.nn.Flatten'}),
+	(m22: parameter {framework: 'PaddlePaddle', operator: 'paddle.nn.Flatten'})
+merge (m21) -[: parameterOfOperator {parameter_order: m22.parameter_order, name: m22.name}] -> (m22);
+
+match
+	(m21: parameter {framework: 'PaddlePaddle', operator: 'paddle.nn.Flatten'}),
+	(m22: childParameter {framework: 'PaddlePaddle', operator: 'paddle.nn.Flatten'})
+where m21.name = m22.name
+merge (m21) -[: oneOf {dtype_order: m22.dtype_order, dtype: m22.dtype}] -> (m22);
+
+match
+	(m21: operator {full_name: 'paddle.nn.Flatten'}),
+	(m22: input {framework: 'PaddlePaddle', operator: 'paddle.nn.Flatten'})
+merge (m21) -[: inputOfOperator {input_order: m22.input_order, name: m22.name}] -> (m22);
+
+
+
+// 3. relationship between frameworks
+match
+	(m31: operator {full_name: 'torch.nn.Flatten'}),
+	(m32: operator {full_name: 'paddle.nn.Flatten'})
+merge (m31) -[: equivalentOperator {framework_name: 'PaddlePaddle'}]-> (m32)
+merge (m32) -[: equivalentOperator {framework_name: 'PyTorch'}]-> (m31);
+
+match
+	(m31: parameter {framework: 'PyTorch', operator: "torch.nn.Flatten", parameter_order: 1}),
+	(m32: parameter {framework: 'PaddlePaddle', operator: "paddle.nn.Flatten", parameter_order: 1})
+merge (m31) -[: equivalentParameter {framework_name: 'PaddlePaddle'}]-> (m32)
+merge (m32) -[: equivalentParameter {framework_name: 'PyTorch'}]-> (m31);
+
+match
+	(m31: parameter {framework: 'PyTorch', operator: "torch.nn.Flatten", parameter_order: 2}),
+	(m32: parameter {framework: 'PaddlePaddle', operator: "paddle.nn.Flatten", parameter_order: 2})
+merge (m31) -[: equivalentParameter {framework_name: 'PaddlePaddle'}]-> (m32)
+merge (m32) -[: equivalentParameter {framework_name: 'PyTorch'}]-> (m31);
+
+match
+	(m31: input {framework: 'PyTorch', operator: "torch.nn.Flatten", input_order: 1}),
+	(m32: input {framework: 'PaddlePaddle', operator: "paddle.nn.Flatten", input_order: 1})
+merge (m31) -[: equivalentParameter {framework_name: 'PaddlePaddle'}]-> (m32)
+merge (m32) -[: equivalentParameter {framework_name: 'PyTorch'}]-> (m31);

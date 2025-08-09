@@ -1,0 +1,79 @@
+// 1.1 torchvision.transforms.RandomVerticalFlip
+// 以给定的概率对输入图像在垂直方向进行随机翻转。
+merge (: framework {name: 'PyTorch', version: '1.5.0'});
+merge (: class {framework: 'PyTorch', name: 'torchvision'});
+merge (: class {framework: 'PyTorch', name: 'transforms'});
+merge (: operator {framework: 'PyTorch', name: 'RandomVerticalFlip', full_name: 'torchvision.transforms.RandomVerticalFlip'});
+merge (: parameter {framework: 'PyTorch', operator: 'RandomVerticalFlip', parameter_order: 1, name: 'p', dtype: 'float', default: 0.5, optional: 'True'});
+
+
+// 1.2 mindspore.dataset.transforms.RandomVerticalFlip
+merge (: framework {name: 'MindSpore', version: '1.5.0'});
+merge (: class {framework: 'MindSpore', name: 'mindspore'});
+merge (: class {framework: 'MindSpore', name: 'dataset'});
+merge (: class {framework: 'MindSpore', name: 'transforms'});
+merge (: operator {framework: 'MindSpore', name: 'RandomVerticalFlip', full_name: 'mindspore.dataset.transforms.RandomVerticalFlip'});
+merge (: parameter {framework: 'MindSpore', operator: 'RandomVerticalFlip', parameter_order: 1, name: 'prob', dtype: 'float', default: 0.5, optional: 'True'});
+
+
+
+// 2. relationship within the framework
+// 2.1 torchvision.transforms.RandomVerticalFlip
+match
+	(m1: framework {name: 'PyTorch'}),
+	(m2: class {framework: 'PyTorch', name: 'torchvision'}),
+	(m3: class {framework: 'PyTorch', name: 'transforms'}),
+	(m4: operator {full_name: 'torchvision.transforms.RandomVerticalFlip'})
+merge (m1) -[: classOfFramework {name: m2.name}]-> (m2)
+merge (m2) -[: subClassOfClass {name: m3.name}]-> (m3)
+merge (m3) -[: operatorOfClass {name: m4.name}]-> (m4);
+
+match
+	(m21: operator {full_name: 'torchvision.transforms.RandomVerticalFlip'}),
+	(m22: parameter {framework: 'PyTorch', operator: 'RandomVerticalFlip'})
+merge (m21) -[: parameterOfOperator {parameter_order: m22.parameter_order, name: m22.name}] -> (m22);
+
+match
+	(m21: parameter {framework: 'PyTorch', operator: 'RandomVerticalFlip'}),
+	(m22: childParameter {framework: 'PyTorch', operator: 'RandomVerticalFlip'})
+where m21.name = m22.name
+merge (m21) -[: oneOf {dtype_order: m22.dtype_order, dtype: m22.dtype}] -> (m22);
+
+
+// 2.2 mindspore.dataset.transforms.RandomVerticalFlip
+match
+	(m1: framework {name: 'MindSpore'}),
+	(m2: class {framework: 'MindSpore', name: 'mindspore'}),
+	(m3: class {framework: 'MindSpore', name: 'dataset'}),
+	(m4: class {framework: 'MindSpore', name: 'transforms'}),
+	(m5: operator {full_name: 'mindspore.dataset.transforms.RandomVerticalFlip'})
+merge (m1) -[: classOfFramework {name: m2.name}]-> (m2)
+merge (m2) -[: subClassOfClass {name: m3.name}]-> (m3)
+merge (m3) -[: subClassOfClass {name: m4.name}]-> (m4)
+merge (m4) -[: operatorOfClass {name: m5.name}]-> (m5);
+
+match
+	(m21: operator {full_name: 'mindspore.dataset.transforms.RandomVerticalFlip'}),
+	(m22: parameter {framework: 'MindSpore', operator: 'RandomVerticalFlip'})
+merge (m21) -[: parameterOfOperator {parameter_order: m22.parameter_order, name: m22.name}] -> (m22);
+
+match
+	(m21: parameter {framework: 'MindSpore', operator: 'RandomVerticalFlip'}),
+	(m22: childParameter {framework: 'MindSpore', operator: 'RandomVerticalFlip'})
+where m21.name = m22.name
+merge (m21) -[: oneOf {dtype_order: m22.dtype_order, dtype: m22.dtype}] -> (m22);
+
+
+
+// 3. relationship between frameworks
+match
+	(m31: operator {full_name: 'torchvision.transforms.RandomVerticalFlip'}),
+	(m32: operator {full_name: 'mindspore.dataset.transforms.RandomVerticalFlip'})
+merge (m31) -[: equivalentOperator {framework_name: 'MindSpore'}]-> (m32)
+merge (m32) -[: equivalentOperator {framework_name: 'PyTorch'}]-> (m31);
+
+match
+	(m31: parameter {framework: 'PyTorch', operator: "RandomVerticalFlip", parameter_order: 1}),
+	(m32: parameter {framework: 'MindSpore', operator: "RandomVerticalFlip", parameter_order: 1})
+merge (m31) -[: equivalentParameter {framework_name: 'MindSpore'}]-> (m32)
+merge (m32) -[: equivalentParameter {framework_name: 'PyTorch'}]-> (m31);

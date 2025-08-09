@@ -1,0 +1,26 @@
+// PyTorch -> forward
+merge (: framework {name: 'PyTorch', version: '1.5.0'});
+merge (: member_function {framework: 'PyTorch', name: 'forward'});
+
+
+// MindSpore -> construct
+merge (: framework {name: 'MindSpore', version: '1.5.0'});
+merge (: member_function {framework: 'MindSpore', name: 'construct'});
+
+
+// relationship within the framework
+match
+	(m1: framework {name: 'PyTorch'}),
+	(m2: member_function {framework: 'PyTorch', name: 'forward'}),
+	(n1: framework {name: 'MindSpore'}),
+	(n2: member_function {framework: 'MindSpore', name: 'construct'})
+merge (m1) -[: memberFunctionOfFramework {name: m2.name}]-> (m2)
+merge (n1) -[: memberFunctionOfFramework {name: n2.name}]-> (n2);
+
+
+// relationship between frameworks
+match
+	(m3: member_function {framework: 'PyTorch', name: 'forward'}),
+	(n3: member_function {framework: 'MindSpore', name: 'construct'})
+merge (m3) -[: equivalentMemberFunction {framework_name: 'MindSpore'}]-> (n3)
+merge (n3) -[: equivalentMemberFunction {framework_name: 'PyTorch'}]-> (m3);

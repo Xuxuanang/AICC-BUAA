@@ -1,0 +1,121 @@
+// 1.1 torchvision.transforms.RandomRotation
+// 在指定的角度范围内，随机旋转输入图像。
+merge (: framework {name: 'PyTorch', version: '1.5.0'});
+merge (: class {framework: 'PyTorch', name: 'torchvision'});
+merge (: class {framework: 'PyTorch', name: 'transforms'});
+merge (: operator {framework: 'PyTorch', name: 'RandomRotation', full_name: 'torchvision.transforms.RandomRotation'});
+merge (: parameter {framework: 'PyTorch', operator: 'RandomRotation', parameter_order: 1, name: 'degrees', dtype: 2});
+merge (: childParameter {framework: 'PyTorch', operator: 'RandomRotation', dtype_order: 1, parameter_order: 1, name: 'degrees', dtype : 'sequence'});
+merge (: childParameter {framework: 'PyTorch', operator: 'RandomRotation', dtype_order: 2, parameter_order: 1, name: 'degrees', dtype : 'number'});
+merge (: parameter {framework: 'PyTorch', operator: 'RandomRotation', parameter_order: 2, name: 'interpolation', dtype: 'interpolationMode', default: 'InterpolationMode.NEAREST'});
+merge (: parameter {framework: 'PyTorch', operator: 'RandomRotation', parameter_order: 3, name: 'expand', dtype: 'bool', default: 'False', optional: 'True'});
+merge (: parameter {framework: 'PyTorch', operator: 'RandomRotation', parameter_order: 4, name: 'center', dtype: 'sequence', default: 'None', optional: 'True'});
+merge (: parameter {framework: 'PyTorch', operator: 'RandomRotation', parameter_order: 5, name: 'fill', dtype: 2, default: 0});
+merge (: childParameter {framework: 'PyTorch', operator: 'RandomRotation', dtype_order: 1, parameter_order: 5, name: 'fill', dtype : 'sequence'});
+merge (: childParameter {framework: 'PyTorch', operator: 'RandomRotation', dtype_order: 2, parameter_order: 5, name: 'fill', dtype : 'number'});
+merge (: parameter {framework: 'PyTorch', operator: 'RandomRotation', parameter_order: 6, name: 'resample', dtype: 'int', default: 'None', optional: 'Ture'});
+
+
+// 1.2 mindspore.dataset.vision.RandomRotation
+merge (: framework {name: 'MindSpore', version: '1.5.0'});
+merge (: class {framework: 'MindSpore', name: 'mindspore'});
+merge (: class {framework: 'MindSpore', name: 'dataset'});
+merge (: class {framework: 'MindSpore', name: 'vision'});
+merge (: operator {framework: 'MindSpore', name: 'RandomRotation', full_name: 'mindspore.dataset.vision.RandomRotation'});
+merge (: parameter {framework: 'MindSpore', operator: 'RandomRotation', parameter_order: 1, name: 'degrees', dtype: 3});
+merge (: childParameter {framework: 'MindSpore', operator: 'RandomRotation', dtype_order: 1, parameter_order: 1, name: 'degrees', dtype : 'int'});
+merge (: childParameter {framework: 'MindSpore', operator: 'RandomRotation', dtype_order: 2, parameter_order: 1, name: 'degrees', dtype : 'float'});
+merge (: childParameter {framework: 'MindSpore', operator: 'RandomRotation', dtype_order: 3, parameter_order: 1, name: 'degrees', dtype : 'sequence'});
+merge (: parameter {framework: 'MindSpore', operator: 'RandomRotation', parameter_order: 2, name: 'resample', dtype: 'Inter', default: 'Inter.NEAREST', optional: 'Ture'});
+merge (: parameter {framework: 'MindSpore', operator: 'RandomRotation', parameter_order: 2, name: 'expand', dtype: 'bool', default: 'False', optional: 'True'});
+merge (: parameter {framework: 'MindSpore', operator: 'RandomRotation', parameter_order: 3, name: 'center', dtype: 'tuple', default: 'None', optional: 'True'});
+merge (: parameter {framework: 'MindSpore', operator: 'RandomRotation', parameter_order: 4, name: 'fill_value', dtype: 2, default: 0});
+merge (: childParameter {framework: 'MindSpore', operator: 'RandomRotation', dtype_order: 1, parameter_order: 6, name: 'fill', dtype : 'int'});
+merge (: childParameter {framework: 'MindSpore', operator: 'RandomRotation', dtype_order: 2, parameter_order: 6, name: 'fill', dtype : 'tuple'});
+
+
+
+// 2. relationship within the framework
+// 2.1 torchvision.transforms.RandomRotation
+match
+	(m1: framework {name: 'PyTorch'}),
+	(m2: class {framework: 'PyTorch', name: 'torchvision'}),
+	(m3: class {framework: 'PyTorch', name: 'transforms'}),
+	(m4: operator {full_name: 'torchvision.transforms.RandomRotation'})
+merge (m1) -[: classOfFramework {name: m2.name}]-> (m2)
+merge (m2) -[: subClassOfClass {name: m3.name}]-> (m3)
+merge (m3) -[: operatorOfClass {name: m4.name}]-> (m4);
+
+match
+	(m21: operator {full_name: 'torchvision.transforms.RandomRotation'}),
+	(m22: parameter {framework: 'PyTorch', operator: 'RandomRotation'})
+merge (m21) -[: parameterOfOperator {parameter_order: m22.parameter_order, name: m22.name}] -> (m22);
+
+match
+	(m21: parameter {framework: 'PyTorch', operator: 'RandomRotation'}),
+	(m22: childParameter {framework: 'PyTorch', operator: 'RandomRotation'})
+where m21.name = m22.name
+merge (m21) -[: oneOf {dtype_order: m22.dtype_order, dtype: m22.dtype}] -> (m22);
+
+
+// 2.2 mindspore.dataset.vision.RandomRotation
+match
+	(m1: framework {name: 'MindSpore'}),
+	(m2: class {framework: 'MindSpore', name: 'mindspore'}),
+	(m3: class {framework: 'MindSpore', name: 'dataset'}),
+	(m4: class {framework: 'MindSpore', name: 'vision'}),
+	(m5: operator {full_name: 'mindspore.dataset.vision.RandomRotation'})
+merge (m1) -[: classOfFramework {name: m2.name}]-> (m2)
+merge (m2) -[: subClassOfClass {name: m3.name}]-> (m3)
+merge (m3) -[: subClassOfClass {name: m4.name}]-> (m4)
+merge (m4) -[: operatorOfClass {name: m5.name}]-> (m5);
+
+match
+	(m21: operator {full_name: 'mindspore.dataset.vision.RandomRotation'}),
+	(m22: parameter {framework: 'MindSpore', operator: 'RandomRotation'})
+merge (m21) -[: parameterOfOperator {parameter_order: m22.parameter_order, name: m22.name}] -> (m22);
+
+match
+	(m21: parameter {framework: 'MindSpore', operator: 'RandomRotation'}),
+	(m22: childParameter {framework: 'MindSpore', operator: 'RandomRotation'})
+where m21.name = m22.name
+merge (m21) -[: oneOf {dtype_order: m22.dtype_order, dtype: m22.dtype}] -> (m22);
+
+
+
+// 3. relationship between frameworks
+match
+	(m31: operator {full_name: 'torchvision.transforms.RandomRotation'}),
+	(m32: operator {full_name: 'mindspore.dataset.vision.RandomRotation'})
+merge (m31) -[: equivalentOperator {framework_name: 'MindSpore'}]-> (m32)
+merge (m32) -[: equivalentOperator {framework_name: 'PyTorch'}]-> (m31);
+
+match
+	(m31: parameter {framework: 'PyTorch', operator: "RandomRotation", parameter_order: 1}),
+	(m32: parameter {framework: 'MindSpore', operator: "RandomRotation", parameter_order: 1})
+merge (m31) -[: equivalentParameter {framework_name: 'MindSpore'}]-> (m32)
+merge (m32) -[: equivalentParameter {framework_name: 'PyTorch'}]-> (m31);
+
+match
+	(m31: parameter {framework: 'PyTorch', operator: "RandomRotation", parameter_order: 3}),
+	(m32: parameter {framework: 'MindSpore', operator: "RandomRotation", parameter_order: 3})
+merge (m31) -[: equivalentParameter {framework_name: 'MindSpore'}]-> (m32)
+merge (m32) -[: equivalentParameter {framework_name: 'PyTorch'}]-> (m31);
+
+match
+	(m31: parameter {framework: 'PyTorch', operator: "RandomRotation", parameter_order: 4}),
+	(m32: parameter {framework: 'MindSpore', operator: "RandomRotation", parameter_order: 4})
+merge (m31) -[: equivalentParameter {framework_name: 'MindSpore'}]-> (m32)
+merge (m32) -[: equivalentParameter {framework_name: 'PyTorch'}]-> (m31);
+
+match
+	(m31: parameter {framework: 'PyTorch', operator: "RandomRotation", parameter_order: 5}),
+	(m32: parameter {framework: 'MindSpore', operator: "RandomRotation", parameter_order: 5})
+merge (m31) -[: equivalentParameter {framework_name: 'MindSpore'}]-> (m32)
+merge (m32) -[: equivalentParameter {framework_name: 'PyTorch'}]-> (m31);
+
+match
+	(m31: parameter {framework: 'PyTorch', operator: "RandomRotation", parameter_order: 6}),
+	(m32: parameter {framework: 'MindSpore', operator: "RandomRotation", parameter_order: 2})
+merge (m31) -[: equivalentParameter {framework_name: 'MindSpore'}]-> (m32)
+merge (m32) -[: equivalentParameter {framework_name: 'PyTorch'}]-> (m31);

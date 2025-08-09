@@ -1,0 +1,139 @@
+// torch.optim.Adam
+merge (: framework {name: 'PyTorch', version: '1.5.0'});
+merge (: class {framework: 'PyTorch', name: 'torch'});
+merge (: class {framework: 'PyTorch', name: 'optim'});
+merge (: operator {framework: 'PyTorch', name: 'Adam', full_name: 'torch.optim.Adam'});
+merge (: parameter {framework: 'PyTorch', operator: 'Adam', parameter_order: 1, name: 'params', dtype: 'iterable'});
+merge (: parameter {framework: 'PyTorch', operator: 'Adam', parameter_order: 2, name: 'lr', dtype: 'float', default: 1e-3, optional: 'True'});
+merge (: parameter {framework: 'PyTorch', operator: 'Adam', parameter_order: 3, name: 'betas', dtype: 'tuple', default: (0.9, 0.999), optional: 'True'});
+merge (: parameter {framework: 'PyTorch', operator: 'Adam', parameter_order: 4, name: 'eps', dtype: 'float', default: 1, default: 1e-8, optional: 'True'});
+merge (: parameter {framework: 'PyTorch', operator: 'Adam', parameter_order: 5, name: 'weight_decay', dtype: 'float', default: 0, optional: 'True'});
+merge (: parameter {framework: 'PyTorch', operator: 'Adam', parameter_order: 6, name: 'amsgrad', dtype: 'boolean', default: 'False', optional: 'true'});
+
+
+// mindspore.nn.Adam
+merge (: framework {name: 'MindSpore', version: '1.5.0'});
+merge (: class {framework: 'MindSpore', name: 'mindspore'});
+merge (: class {framework: 'MindSpore', name: 'nn'});
+merge (: operator {framework: 'MindSpore', name: 'Adam', full_name: 'mindspore.nn.Adam'});
+merge (: parameter {framework: 'MindSpore', operator: 'Adam', parameter_order: 1, name: 'params', dtype: 'int', default: 'Null'});
+merge (: parameter {framework: 'MindSpore', operator: 'Adam', parameter_order: 2, name: 'learning_rate', dtype: 'int', default: 'Null'});
+merge (: parameter {framework: 'MindSpore', operator: 'Adam', parameter_order: 3, name: 'beta1', dtype: 2, default: 'Null'});
+merge (: childParameter {framework: 'MindSpore', operator: 'Adam', dtype_order: 1, parameter_order: 3, name: 'kernel_size', dtype: 'int', default: 'Null'});
+merge (: childParameter {framework: 'MindSpore', operator: 'Adam', dtype_order: 2, parameter_order: 3, name: 'kernel_size', dtype: 'tuple', default: 'Null'});
+merge (: parameter {framework: 'MindSpore', operator: 'Adam', parameter_order: 4, name: 'beta2', dtype: 2, default: 1});
+merge (: childParameter {framework: 'MindSpore', operator: 'Adam', dtype_order: 1, parameter_order: 4, name: 'stride', dtype: 'int', default : 1});
+merge (: childParameter {framework: 'MindSpore', operator: 'Adam', dtype_order: 2, parameter_order: 4, name: 'stride', dtype: 'tuple', default: 'Null'});
+merge (: parameter {framework: 'MindSpore', operator: 'Adam', parameter_order: 5, name: 'eps', dtype : 'str', default : 'same'});
+merge (: parameter {framework: 'MindSpore', operator: 'Adam', parameter_order: 6, name: 'use_locking', dtype: 2, default: 0});
+merge (: childParameter {framework: 'MindSpore', operator: 'Adam', dtype_order: 1, parameter_order: 6, name: 'padding', dtype: 'int', default: 0});
+merge (: childParameter {framework: 'MindSpore', operator: 'Adam', dtype_order: 2, parameter_order: 6, name: 'padding', dtype: 'tuple', default: 'Null'});
+merge (: parameter {framework: 'MindSpore', operator: 'Adam', parameter_order: 7, name: 'use_nesterov', dtype: 2, default: 1});
+merge (: childParameter {framework: 'MindSpore', operator: 'Adam', dtype_order: 1, parameter_order: 7, name: 'dilation', dtype: 'int', default: 1});
+merge (: childParameter {framework: 'MindSpore', operator: 'Adam', dtype_order: 2, parameter_order: 7, name: 'dilation', dtype: 'tuple', default: 'Null'});
+merge (: parameter {framework: 'MindSpore', operator: 'Adam', parameter_order: 8, name: 'weight_decay', dtype: 'int', default: 1});
+merge (: parameter {framework: 'MindSpore', operator: 'Adam', parameter_order: 9, name: 'loss_scale', dtype: 'bool', default: 'false'});
+merge (: parameter {framework: 'MindSpore', operator: 'Adam', parameter_order: 10, name: 'use_amsgrad', dtype: 4, default: 'normal'});
+
+
+
+// relationship within the framework
+match
+	(m1: framework {name: 'PyTorch'}),
+	(m2: class {framework: 'PyTorch', name: 'torch'}),
+	(m3: class {framework: 'PyTorch', name: 'nn'}),
+	(m4: operator {full_name: 'torch.nn.Adam'}),
+	(n1: framework {name: 'MindSpore'}),
+	(n2: class {framework: 'MindSpore', name: 'mindspore'}),
+	(n3: class {framework: 'MindSpore', name: 'nn'}),
+	(n4: operator {full_name: 'mindspore.nn.Adam'})
+merge (m1) -[: classOfFramework {name: m2.name}]-> (m2)
+merge (m2) -[: subClassOfClass {name: m3.name}]-> (m3)
+merge (m3) -[: operatorOfClass {name: m4.name}]-> (m4)
+merge (n1) -[: classOfFramework {name: n2.name}]-> (n2)
+merge (n2) -[: subClassOfClass {name: n3.name}]-> (n3)
+merge (n3) -[: operatorOfClass {name: n4.name}]-> (n4);
+
+match
+	(m11: operator {full_name: 'torch.nn.Adam'}),
+	(n11: parameter {framework: 'PyTorch', operator: 'Adam'})
+merge (m11) -[: parameterOfOperator {parameter_order: n11.parameter_order, name: n11.name}] -> (n11);
+
+match
+	(m12: parameter {framework: 'PyTorch', operator: 'Adam'}),
+	(n12: childParameter {framework: 'PyTorch', operator: 'Adam'})
+where m12.name = n12.name
+merge (m12) -[: oneOf {dtype_order: n12.dtype_order, dtype: n12.dtype}] -> (n12);
+
+match
+	(m21: operator {full_name: 'mindspore.nn.Adam'}),
+	(n21: parameter {framework: 'MindSpore', operator: 'Adam'})
+merge (m21) -[: parameterOfOperator {parameter_order: n21.parameter_order, name: n21.name}] -> (n21);
+
+match
+	(m22: parameter {framework: 'MindSpore', operator: 'Adam'}),
+	(n22: childParameter {framework: 'MindSpore', operator: 'Adam'})
+where m22.name = n22.name
+merge (m22) -[: oneOf {dtype_order: n22.dtype_order, dtype: n22.name}] -> (n22);
+
+
+// relationship between frameworks
+match
+	(m3: operator {full_name: 'torch.nn.Adam'}),
+	(n3: operator {full_name: 'mindspore.nn.Adam'})
+merge (m3) -[: equivalentOperator {framework_name: 'MindSpore'}]-> (n3)
+merge (n3) -[: equivalentOperator {framework_name: 'PyTorch'}]-> (m3);
+
+match
+	(m31: parameter {framework: 'PyTorch', operator: "Adam", parameter_order: 1}),
+	(n31: parameter {framework: 'MindSpore', operator: "Adam", parameter_order: 1})
+merge (m31) -[: equivalentParameter {framework_name: 'MindSpore'}]-> (n31)
+merge (n31) -[: equivalentParameter {framework_name: 'PyTorch'}]-> (m31);
+
+match
+	(m31: parameter {framework: 'PyTorch', operator: "Adam", parameter_order: 2}),
+	(n31: parameter {framework: 'MindSpore', operator: "Adam", parameter_order: 2})
+merge (m31) -[: equivalentParameter {framework_name: 'MindSpore'}]-> (n31)
+merge (n31) -[: equivalentParameter {framework_name: 'PyTorch'}]-> (m31);
+
+match
+	(m31: parameter {framework: 'PyTorch', operator: "Adam", parameter_order: 3}),
+	(n31: parameter {framework: 'MindSpore', operator: "Adam", parameter_order: 3})
+merge (m31) -[: equivalentParameter {framework_name: 'MindSpore'}]-> (n31)
+merge (n31) -[: equivalentParameter {framework_name: 'PyTorch'}]-> (m31);
+
+match
+	(m31: parameter {framework: 'PyTorch', operator: "Adam", parameter_order: 4}),
+	(n31: parameter {framework: 'MindSpore', operator: "Adam", parameter_order: 4})
+merge (m31) -[: equivalentParameter {framework_name: 'MindSpore'}]-> (n31)
+merge (n31) -[: equivalentParameter {framework_name: 'PyTorch'}]-> (m31);
+
+match
+	(m31: parameter {framework: 'PyTorch', operator: "Adam", parameter_order: 5}),
+	(n31: parameter {framework: 'MindSpore', operator: "Adam", parameter_order: 6})
+merge (m31) -[: equivalentParameter {framework_name: 'MindSpore'}]-> (n31)
+merge (n31) -[: equivalentParameter {framework_name: 'PyTorch'}]-> (m31);
+
+match
+	(m31: parameter {framework: 'PyTorch', operator: "Adam", parameter_order: 6}),
+	(n31: parameter {framework: 'MindSpore', operator: "Adam", parameter_order: 7})
+merge (m31) -[: equivalentParameter {framework_name: 'MindSpore'}]-> (n31)
+merge (n31) -[: equivalentParameter {framework_name: 'PyTorch'}]-> (m31);
+
+match
+	(m31: parameter {framework: 'PyTorch', operator: "Adam", parameter_order: 7}),
+	(n31: parameter {framework: 'MindSpore', operator: "Adam", parameter_order: 8})
+merge (m31) -[: equivalentParameter {framework_name: 'MindSpore'}]-> (n31)
+merge (n31) -[: equivalentParameter {framework_name: 'PyTorch'}]-> (m31);
+
+match
+	(m31: parameter {framework: 'PyTorch', operator: "Adam", parameter_order: 8}),
+	(n31: parameter {framework: 'MindSpore', operator: "Adam", parameter_order: 9})
+merge (m31) -[: equivalentParameter {framework_name: 'MindSpore'}]-> (n31)
+merge (n31) -[: equivalentParameter {framework_name: 'PyTorch'}]-> (m31);
+
+match
+	(m31: parameter {framework: 'PyTorch', operator: "Adam", parameter_order: 9}),
+	(n31: parameter {framework: 'MindSpore', operator: "Adam", parameter_order: 5})
+merge (m31) -[: equivalentParameter {framework_name: 'MindSpore'}]-> (n31)
+merge (n31) -[: equivalentParameter {framework_name: 'PyTorch'}]-> (m31);

@@ -1,0 +1,38 @@
+// torch.nn.Sequential
+merge (: framework {name: 'PyTorch', version: '1.5.0'});
+merge (: class {framework: 'PyTorch', name: 'torch'});
+merge (: class {framework: 'PyTorch', name: 'nn'});
+merge (: operator {framework: 'PyTorch', name: 'Sequential', full_name: 'torch.nn.Sequential'});
+
+
+// mindspore.nn.SequentialCell
+merge (: framework {name: 'MindSpore', version: '1.5.0'});
+merge (: class {framework: 'MindSpore', name: 'mindspore'});
+merge (: class {framework: 'MindSpore', name: 'nn'});
+merge (: operator {framework: 'MindSpore', name: 'SequentialCell', full_name: 'mindspore.nn.SequentialCell'});
+
+
+// relationship within the framework
+match
+	(m1: framework {name: 'PyTorch'}),
+	(m2: class {framework: 'PyTorch', name: 'torch'}),
+	(m3: class {framework: 'PyTorch', name: 'nn'}),
+	(m4: operator {full_name: 'torch.nn.Sequential'}),
+	(n1: framework {name: 'MindSpore'}),
+	(n2: class {framework: 'MindSpore', name: 'mindspore'}),
+	(n3: class {framework: 'MindSpore', name: 'nn'}),
+	(n4: operator {full_name: 'mindspore.nn.SequentialCell'})
+merge (m1) -[: classOfFramework {name: m2.name}]-> (m2)
+merge (m2) -[: subClassOfClass {name: m3.name}]-> (m3)
+merge (m3) -[: operatorOfClass {name: m4.name}]-> (m4)
+merge (n1) -[: classOfFramework {name: n2.name}]-> (n2)
+merge (n2) -[: subClassOfClass {name: n3.name}]-> (n3)
+merge (n3) -[: operatorOfClass {name: n4.name}]-> (n4);
+
+
+// relationship between frameworks
+match
+	(m3: operator {full_name: 'torch.nn.Sequential'}),
+	(n3: operator {full_name: 'mindspore.nn.SequentialCell'})
+merge (m3) -[: equivalentOperator {framework_name: 'MindSpore'}]-> (n3)
+merge (n3) -[: equivalentOperator {framework_name: 'PyTorch'}]-> (m3);
