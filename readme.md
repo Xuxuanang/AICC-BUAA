@@ -1,6 +1,6 @@
 # AICC
 **AI** **C**ode **C**onverter based knowledge graph
-本项目的项目是由北航团队开发的**AI模型迁移工具**。·
+本项目是由北航团队开发的**AI模型迁移工具**。·
 
 ## 项目文件架构
 1. conversion
