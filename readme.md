@@ -1,6 +1,6 @@
-# OKGCT
-**O**perator **K**nowledge **G**raph **C**ode **T**ransformer
-本项目的项目是由北航团队开发的**模型迁移工具**。·
+# AICC
+**AI** **C**ode **C**onverter based knowledge graph
+本项目的项目是由北航团队开发的**AI模型迁移工具**。·
 
 ## 项目文件架构
 1. conversion
